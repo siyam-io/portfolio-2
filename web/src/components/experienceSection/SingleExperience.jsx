@@ -9,7 +9,7 @@ const SingleExperience = ({ experience }) => {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}
-      className="bg-white/5 border border-white/5 hover:border-cyan/30 rounded-2xl p-6 md:w-[280px] lg:w-[320px] w-full transition-all duration-300 hover:-translate-y-2 hover:shadow-cyanShadow relative overflow-hidden flex flex-col group"
+      className="bg-white/5 border border-white/5 hover:border-cyan/30 rounded-2xl p-6 md:p-8 w-full max-w-4xl mx-auto transition-all duration-300 hover:-translate-y-2 hover:shadow-cyanShadow relative overflow-hidden flex flex-col group"
     >
       {/* Premium Top Gradient Accent Strip */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan to-orange opacity-40 group-hover:opacity-100 transition duration-500"></div>

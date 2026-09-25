@@ -13,70 +13,63 @@ dotenv.config();
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/portfolio";
 
 const skills = [
-  { name: "HTML", iconName: "FaHtml5", category: "frontend" },
-  { name: "CSS", iconName: "FaCss3Alt", category: "frontend" },
-  { name: "TailwindCSS", iconName: "RiTailwindCssFill", category: "frontend" },
-  { name: "JavaScript", iconName: "IoLogoJavascript", category: "frontend" },
-  { name: "ReactJS", iconName: "FaReact", category: "frontend" },
-  { name: "NodeJS", iconName: "FaNodeJs", category: "backend" },
-  { name: "ExpressJS", iconName: "SiExpress", category: "backend" },
+  { name: "Node.js", iconName: "FaNodeJs", category: "backend" },
+  { name: "Express.js", iconName: "SiExpress", category: "backend" },
+  { name: "React.js", iconName: "FaReact", category: "frontend" },
+  { name: "Next.js", iconName: "SiNextdotjs", category: "frontend" },
+  { name: "React Native (Expo)", iconName: "FaMobileAlt", category: "frontend" },
   { name: "MongoDB", iconName: "SiMongodb", category: "backend" },
-  { name: "NextJS", iconName: "SiNextdotjs", category: "frontend" },
-  { name: "Git", iconName: "FaGitAlt", category: "tools" },
-  { name: "GitHub", iconName: "FaGithub", category: "tools" }
+  { name: "JavaScript", iconName: "IoLogoJavascript", category: "frontend" },
+  { name: "REST API", iconName: "FaNetworkWired", category: "backend" },
+  { name: "Socket.io", iconName: "SiSocketdotio", category: "backend" },
+  { name: "JWT Authentication", iconName: "FaLock", category: "backend" },
+  { name: "Tailwind CSS", iconName: "RiTailwindCssFill", category: "frontend" },
+  { name: "RBAC", iconName: "FaUserShield", category: "backend" },
+  { name: "Vercel & Render", iconName: "FaCloud", category: "tools" },
+  { name: "UI/UX Strategies", iconName: "FaPaintBrush", category: "frontend" },
+  { name: "Database Management", iconName: "FaDatabase", category: "backend" },
+  { name: "C#", iconName: "TbBrandCSharp", category: "backend" }
 ];
 
 const experiences = [
   {
-    job: "Front-End Developer",
-    company: "Alex Apps",
-    date: "2022 - Present",
+    job: "Full Stack Developer (Freelance)",
+    company: "The Culinary Institute of Bangladesh",
+    date: "17 Jan 2026 – 31 Aug 2026",
     responsibilities: [
-      "Implementing reusable components.",
-      "Participating in large scale application.",
-      "Working on the performance of web applications.",
-      "Generating new ideas for better user experience."
+      "Architected and developed the full-stack management system for the Culinary Institute of Bangladesh using React, Node.js, Express, and MongoDB.",
+      "Built role-based access control (RBAC), vision scanning algorithms, batch scheduling workflows, and automated PDF certificate generation services.",
+      "Designed and integrated secure RESTful APIs along with responsive frontend dashboards using modern UI/UX patterns."
     ]
   },
   {
-    job: "Course Instructor",
-    company: "Nucamp",
-    date: "2023 - Present",
+    job: "Web Developer (Freelance)",
+    company: "Savior Lifestyle",
+    date: "01 Apr 2025 – 29 Nov 2025",
     responsibilities: [
-      "Explaining and facilitating web development concepts.",
-      "Help students with their assignments and grade them weekly.",
-      "Provide support for students through their learning journey."
-    ]
-  },
-  {
-    job: "Course Instructor",
-    company: "Sprints",
-    date: "2024 - Present",
-    responsibilities: [
-      "Teaching JavaScript, React and TailwindCSS.",
-      "Participating in preparing course materials.",
-      "Helping students through their way in learning web development technologies."
+      "Developed an end-to-end customized inventory management system.",
+      "Maintained and upgraded existing digital architecture."
     ]
   }
 ];
 
 const projects = [
   {
-    name: "Clothing E-Commerce",
+    name: "Chat Z — Real-Time Messaging",
     year: "2025",
-    description: "A modern, full-featured e-commerce platform for fashion with product filtering, cart management, and seamless checkout experience.",
-    align: "left",
-    image: "/images/clothing-ecommerce.jpg",
-    link: "https://github.com",
-    github: "https://github.com"
-  },
-  {
-    name: "Chat Z",
-    year: "2025",
-    description: "A real-time messaging web application featuring instant chat rooms, active user status, and a sleek, responsive chat interface.",
+    description: "Full-featured real-time chat application built with React, Node.js, Express, and Socket.io. Features instant bi-directional messaging, online user status tracking, room/group creation, media sharing, and JWT authentication. Optimized for low latency and smooth UI/UX responsiveness.",
     align: "right",
     image: "/images/chatz-app.jpg",
-    link: "https://github.com",
+    link: "https://github.com/siyam-io/chatz",
+    github: "https://github.com/siyam-io/chatz"
+  },
+  {
+    name: "Multi-Vendor E-Commerce",
+    year: "2025",
+    description: "Multi-vendor apparel e-commerce platform with dynamic theme engine, real-time inventory management, and backend microservices. Built using Next.js, Node.js, Express, and MongoDB with integrated Pathao Courier service and payment flows.",
+    align: "left",
+    image: "/images/clothing-ecommerce.jpg",
+    link: "https://clothing-e-commerce-web.vercel.app",
     github: "https://github.com"
   }
 ];
@@ -105,10 +98,10 @@ const seedDB = async () => {
 
     // 2. Create Profile
     const profile = new Profile({
-      name: "Esthiyak Ahmmed",
-      role: "Frontend Web Developer",
-      bio: "Transforming complex ideas into pixel-perfect, interactive web experiences with clean architecture and modern UI design.",
-      about: "I am a dedicated Frontend & Full-Stack Engineer focused on building high-performance, modern web applications. Specialized in React.js, Next.js, Node.js, and MongoDB, I transform complex business requirements into intuitive, lightning-fast user interfaces. I take pride in writing clean, maintainable code, optimizing web performance, and delivering seamless digital experiences."
+      name: "Esthyak Ahmmed Siyam",
+      role: "Full Stack Software Engineer",
+      bio: "Building scalable web and mobile solutions using the MERN Stack | React Native | Web Application Security.",
+      about: "Full Stack Software Engineer with 1.3 years of experience building scalable web and mobile solutions using Node.js, Express, React, Next.js, MongoDB, and Expo (React Native). Proficient in RESTful API architecture, real-time data streaming via Socket.io, modern Tailwind CSS interfaces, and automated cloud deployments on Vercel and Render. Specializes in architecting scalable backend APIs and real-time applications with a strong emphasis on secure coding practices, database optimization, JWT authentication, and cross-platform mobile performance."
     });
     await profile.save();
     console.log("Profile seeded successfully");

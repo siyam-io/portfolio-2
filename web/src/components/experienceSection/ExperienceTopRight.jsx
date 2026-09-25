@@ -2,18 +2,11 @@ import React from "react";
 
 const ExperienceTopRight = () => {
   return (
-    <div className="w-full max-w-[280px] lg:max-w-none lg:w-[30%] xl:w-[25%] bg-white/5 border border-white/5 p-6 rounded-2xl backdrop-blur-md shadow-xl">
-      <p className="text-sm text-center text-slate-400 leading-relaxed">
-        I specialize in{" "}
-        <span className="font-bold text-white">
-          React and modern JavaScript
-        </span>
-        , leveraging best practices to create scalable and maintainable
-        solutions. <br className="my-2" />
-        My experience spans working on diverse projects, from small business
-        websites to{" "}
-        <span className="font-bold text-white">complex front-end systems</span>,
-        always aiming for clean code and exceptional user experiences.
+    <div className="w-full max-w-[280px] lg:max-w-none lg:w-[30%] xl:w-[25%] bg-white/5 border border-white/5 hover:border-cyan/30 p-6 rounded-2xl backdrop-blur-md shadow-xl transition-all duration-300">
+      <p className="text-sm text-left text-slate-300 leading-relaxed">
+        Specialized in architecting <span className="font-bold text-white">Full-Stack MERN</span> and <span className="font-bold text-white">React Native</span> applications. <br className="my-3" />
+        Passionate about writing secure, optimized backend microservices and creating highly interactive, seamless frontend experiences. <br className="my-3" />
+        Always focused on <span className="text-cyan font-semibold">industry best practices</span> and delivering production-ready digital products.
       </p>
     </div>
   );

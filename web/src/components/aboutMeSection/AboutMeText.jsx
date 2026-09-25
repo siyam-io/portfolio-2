@@ -5,7 +5,7 @@ import { FiCheckCircle, FiCode, FiZap, FiLayout } from "react-icons/fi";
 
 const AboutMeText = () => {
   const [profile, setProfile] = useState({
-    about: "I am a dedicated Frontend & Full-Stack Engineer focused on building high-performance, modern web applications. Specialized in React.js, Next.js, Node.js, and MongoDB, I transform complex business requirements into intuitive, lightning-fast user interfaces. I take pride in writing clean, maintainable code, optimizing web performance, and delivering seamless digital experiences."
+    about: "Full Stack Software Engineer with 1.3 years of experience building scalable web and mobile solutions using Node.js, Express, React, Next.js, MongoDB, and Expo (React Native). Proficient in RESTful API architecture, real-time data streaming via Socket.io, modern Tailwind CSS interfaces, and automated cloud deployments on Vercel and Render. Specializes in architecting scalable backend APIs and real-time applications with a strong emphasis on secure coding practices, database optimization, JWT authentication, and cross-platform mobile performance."
   });
 
   useEffect(() => {

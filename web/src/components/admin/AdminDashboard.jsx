@@ -21,6 +21,7 @@ import {
   getMessages,
   deleteMessage,
   uploadImage,
+  uploadCV,
   getKeys,
   saveKeys,
 } from "../../api";
@@ -65,6 +66,27 @@ const AdminDashboard = () => {
       toast.error("Failed to upload image");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const [cvUploading, setCvUploading] = useState(false);
+
+  const handleCvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setCvUploading(true);
+    try {
+      const data = await uploadCV(file);
+      if (data.success) {
+        setProfile((prev) => ({ ...prev, cvUrl: data.url }));
+        toast.success(`CV uploaded successfully!`);
+      }
+    } catch (err) {
+      console.error("CV Upload failed:", err);
+      toast.error("Failed to upload CV");
+    } finally {
+      setCvUploading(false);
     }
   };
 
@@ -576,6 +598,23 @@ const AdminDashboard = () => {
               />
               {profile.heroImage && (
                 <img src={profile.heroImage} alt="Hero" className="mt-2 max-h-40 object-cover rounded" />
+              )}
+            </div>
+
+            {/* CV Upload */}
+            <div className="mt-4">
+              <label className="block text-gray-300 text-sm font-semibold mb-2">Upload CV (PDF)</label>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleCvUpload}
+                disabled={cvUploading}
+                className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-white focus:outline-none focus:border-cyan transition duration-300"
+              />
+              {profile.cvUrl && (
+                <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer" className="text-cyan text-sm mt-2 block hover:underline">
+                  View Current CV
+                </a>
               )}
             </div>
 

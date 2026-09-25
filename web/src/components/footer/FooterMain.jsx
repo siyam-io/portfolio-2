@@ -24,7 +24,7 @@ const FooterMain = () => {
     <footer className="px-6 py-8 mt-20 border-t border-white/5 bg-[#030205]/40 backdrop-blur-md">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-[1200px] mx-auto gap-6">
         <p className="text-lg sm:text-xl font-bold uppercase tracking-wider text-white font-special">
-          ESTHIYAK AHMMED
+          ESTHYAK AHMMED SIYAM
         </p>
         <ul className="flex flex-wrap justify-center gap-6 text-xs sm:text-sm text-slate-400 font-semibold uppercase tracking-wider">
           {footerLinks.map((item, index) => {

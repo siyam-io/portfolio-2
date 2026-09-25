@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import SingleExperience from "./SingleExperience";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { fadeIn } from "../../framerMotion/variants";
 import { getExperiences } from "../../api";
@@ -17,24 +16,11 @@ const AllExperiences = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full">
+    <div className="flex flex-col items-center justify-center gap-8 w-full max-w-5xl mx-auto">
       {experiences.map((experience, index) => {
         return (
           <React.Fragment key={experience._id || index}>
             <SingleExperience experience={experience} />
-            {index < experiences.length - 1 ? (
-              <motion.div
-                variants={fadeIn("right", 0)}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: false, amount: 0.7 }}
-                className="hidden lg:block"
-              >
-                <FaArrowRightLong className="text-3xl text-orange" />
-              </motion.div>
-            ) : (
-              ""
-            )}
           </React.Fragment>
         );
       })}

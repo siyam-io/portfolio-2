@@ -7,8 +7,8 @@ import { FiArrowUpRight, FiMail } from "react-icons/fi";
 
 const HeroText = () => {
   const [profile, setProfile] = useState({
-    name: "Esthiyak Ahmmed",
-    role: "Developer",
+    name: "Esthyak Ahmmed Siyam",
+    role: "Full Stack Software Engineer",
     bio: "Transforming complex ideas into pixel-perfect, interactive web experiences with clean architecture and modern UI design."
   });
 
@@ -20,7 +20,7 @@ const HeroText = () => {
       .catch((err) => console.error("Error loading hero profile:", err));
   }, []);
 
-  const nameParts = (profile.name || "Esthiyak Ahmmed").split(" ");
+  const nameParts = (profile.name || "Esthyak Ahmmed Siyam").split(" ");
   const firstName = nameParts[0] || "";
   const lastName = nameParts.slice(1).join(" ") || "";
 
@@ -100,6 +100,17 @@ const HeroText = () => {
             Contact Me <FiMail className="text-lg" />
           </button>
         </Link>
+
+        {/* Download CV Button */}
+        <a
+          href={profile.cvUrl || "/Siyam_CV.pdf"}
+          download="Siyam_CV.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-3 rounded-xl border border-orange/40 bg-orange/10 hover:bg-orange hover:text-white text-orange font-semibold text-sm sm:text-base flex items-center gap-2 transition-all duration-300 backdrop-blur-sm cursor-pointer shadow-sm hover:shadow-orange/40"
+        >
+          Download CV <FiArrowUpRight className="text-lg rotate-90" />
+        </a>
       </motion.div>
     </div>
   );

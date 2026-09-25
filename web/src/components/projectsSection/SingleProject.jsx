@@ -4,24 +4,22 @@ import { FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { fadeIn } from "../../framerMotion/variants";
 
-const SingleProject = ({ name, year, align, image, link, github, description }) => {
+const SingleProject = ({ name, year, link, github, description }) => {
   return (
     <motion.div
       variants={fadeIn("up", 0.2)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}
-      className={`flex w-full flex-col-reverse md:flex-row items-center gap-6 md:gap-8 ${
-        align === "left" ? "" : "md:flex-row-reverse"
-      } justify-between bg-white/5 border border-white/5 hover:border-cyan/35 rounded-3xl p-6 md:p-8 transition-all duration-500 hover:shadow-cyanShadow relative overflow-hidden group`}
+      className="flex w-full flex-col items-start gap-4 bg-white/5 border border-white/5 hover:border-cyan/35 rounded-3xl p-6 md:p-8 transition-all duration-500 hover:shadow-cyanShadow relative overflow-hidden group"
     >
       {/* Content Side */}
-      <div className="flex flex-col gap-2 md:w-1/2 w-full text-left">
+      <div className="flex flex-col gap-2 w-full text-left">
         <span className="text-xs text-orange uppercase tracking-wider font-extrabold">{year}</span>
         <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-cyan transition duration-300">
           {name}
         </h3>
-        <p className="text-slate-300 text-sm leading-relaxed my-3">
+        <p className="text-slate-300 text-sm leading-relaxed my-3 max-w-3xl">
           {description || "A high-performance modern web application built using industry best practices. Features fully responsive designs, dynamic UI states, smooth animations, and optimized load performance."}
         </p>
         <div className="flex flex-wrap items-center gap-4 mt-2">
@@ -46,17 +44,6 @@ const SingleProject = ({ name, year, align, image, link, github, description }) 
             </a>
           )}
         </div>
-      </div>
-
-      {/* Image Side */}
-      <div className="relative h-[180px] md:h-[220px] w-full md:w-[320px] lg:w-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-lg group-hover:border-cyan/30 transition duration-500 flex-shrink-0">
-        {/* Ambient Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030205]/60 via-transparent to-transparent opacity-60 group-hover:opacity-0 transition duration-500 z-10"></div>
-        <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
-        />
       </div>
 
       {/* Background glow hover effect */}

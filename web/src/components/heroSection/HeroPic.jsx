@@ -45,7 +45,7 @@ const HeroPic = () => {
         {imageSrc && (
           <img
             src={imageSrc}
-            alt="Esthiyak Ahmmed"
+            alt="Esthyak Ahmmed Siyam"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = defaultFallback;

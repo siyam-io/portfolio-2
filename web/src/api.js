@@ -130,6 +130,18 @@ export const uploadImage = async (file) => {
   return res.data;
 };
 
+// CV Upload
+export const uploadCV = async (file) => {
+  const formData = new FormData();
+  formData.append("cv", file);
+  const res = await api.post("/upload/cv", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};
+
 // Credentials Keys Management
 export const getKeys = async () => {
   const res = await api.get("/keys");

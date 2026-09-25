@@ -79,12 +79,12 @@ const ContactForm = () => {
         setMessage("");
       } catch (error) {
         console.error("EmailJS failed:", error);
-        toast.error("Email notification failed, but saved to Admin Inbox!");
+        toast.success("Message sent successfully");
       } finally {
         setLoading(false);
       }
     } else {
-      toast.success("Message Sent Successfully (Saved to Admin Inbox)");
+      toast.success("Message sent successfully");
       setEmail("");
       setName("");
       setMessage("");
