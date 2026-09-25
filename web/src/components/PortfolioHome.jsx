@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { getProfile, getExperiences, getProjects, getSkills, getServices } from '../api';
+import { getProfile, getExperiences, getProjects, getSkills, getServices, API_BASE } from '../api';
 
 const PortfolioHome = () => {
   const [profile, setProfile] = useState({});
@@ -9,6 +9,29 @@ const PortfolioHome = () => {
   const [skills, setSkills] = useState([]);
   const [services, setServices] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleDownloadCv = async (e) => {
+    if (e) e.preventDefault();
+    const downloadUrl = `${API_BASE}/portfolio/cv`;
+    try {
+      const res = await fetch(downloadUrl);
+      if (res.ok) {
+        const blob = await res.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = 'Esthyak_Ahmmed_Siyam_CV.pdf';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+        return;
+      }
+    } catch (err) {
+      console.warn("Direct blob download failed, falling back to window.open", err);
+    }
+    window.open(downloadUrl, '_blank');
+  };
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
@@ -80,7 +103,8 @@ const PortfolioHome = () => {
 
             <div className="nav__actions" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <a 
-                  href="/api/portfolio/cv" 
+                  href={`${API_BASE}/portfolio/cv`} 
+                  onClick={handleDownloadCv}
                   download="Esthyak_Ahmmed_Siyam_CV.pdf"
                   target="_blank" 
                   rel="noopener noreferrer" 
@@ -97,6 +121,7 @@ const PortfolioHome = () => {
                     fontSize: "0.85rem",
                     fontWeight: "600",
                     textDecoration: "none",
+                    cursor: "pointer",
                     transition: "all 0.2s ease"
                   }}
                 >
@@ -133,7 +158,21 @@ const PortfolioHome = () => {
         <a href="#work" className="nav__mobile-link" onClick={() => setMobileMenuOpen(false)}>Work</a>
         <a href="#services" className="nav__mobile-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
         <a href="#contact" className="nav__mobile-link" onClick={() => setMobileMenuOpen(false)}>Contact</a>
-        <div className="nav__mobile-cta">
+        <div className="nav__mobile-cta" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <a 
+              href={`${API_BASE}/portfolio/cv`} 
+              onClick={(e) => { setMobileMenuOpen(false); handleDownloadCv(e); }}
+              download="Esthyak_Ahmmed_Siyam_CV.pdf"
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-secondary"
+              style={{
+                borderColor: "rgba(201, 168, 76, 0.4)",
+                color: "var(--gold, #C9A84C)"
+              }}
+            >
+              Download Resume
+            </a>
             <a href="#contact" className="btn btn-primary" onClick={() => setMobileMenuOpen(false)}>Let's Talk</a>
         </div>
     </div>

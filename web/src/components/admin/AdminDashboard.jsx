@@ -29,6 +29,7 @@ import {
   getKeys,
   saveKeys,
   getGithubRepos,
+  API_BASE,
 } from "../../api";
 
 import {
@@ -727,7 +728,7 @@ const AdminDashboard = () => {
                     {profile.cvUrl && (
                       <div className="mt-3 flex items-center gap-3">
                         <a 
-                          href="/api/portfolio/cv" 
+                          href={`${API_BASE}/portfolio/cv`} 
                           target="_blank" 
                           rel="noopener noreferrer" 
                           download="Esthyak_Ahmmed_Siyam_CV.pdf"
