@@ -398,26 +398,37 @@ router.delete("/services/:id", auth, async (req, res) => {
 
 
 // @route   GET api/portfolio/github-repos/:username
-// @desc    Fetch GitHub repos using authenticated backend proxy
-router.get("/github-repos/:username", auth, async (req, res) => {
+// @desc    Fetch GitHub repos using backend proxy (Public/No auth required)
+router.get("/github-repos/:username", async (req, res) => {
   try {
     const { username } = req.params;
-    console.log("HIT GITHUB PROXY ROUTE for", username);
-    const pat = await getDecryptedKey("GITHUB_PAT");
+    let pat = null;
+    try {
+      pat = await getDecryptedKey("GITHUB_PAT");
+    } catch (e) {
+      console.warn("Could not get GITHUB_PAT:", e.message);
+    }
+
     const headers = {
       "Accept": "application/vnd.github.v3+json",
       "User-Agent": "Portfolio-Admin-App"
     };
     
-    if (pat) {
+    if (pat && pat.trim()) {
       headers["Authorization"] = `Bearer ${pat.trim()}`;
     }
 
-    // Fetch up to 100 repos (you can implement pagination later if needed)
-    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`, { headers });
+    let response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`, { headers });
     
+    // If PAT is invalid (401), retry without PAT
+    if (response.status === 401 && pat) {
+      console.warn("GitHub PAT returned 401, retrying without PAT...");
+      delete headers["Authorization"];
+      response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`, { headers });
+    }
+
     if (response.status === 403) {
-      return res.status(403).json({ msg: "GitHub API rate limit exceeded. Please add a GitHub PAT in API Credentials." });
+      return res.status(403).json({ msg: "GitHub API rate limit exceeded. Please add or update your GitHub PAT in API Credentials." });
     }
     
     if (!response.ok) {

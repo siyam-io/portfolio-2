@@ -390,7 +390,15 @@ const AdminDashboard = () => {
     if (!ghUsername) { toast.error("Invalid GitHub URL."); return; }
     setFetchingRepos(true); setShowGithubModal(true); setRepoSearch("");
     try {
-      const data = await getGithubRepos(ghUsername);
+      let data;
+      try {
+        data = await getGithubRepos(ghUsername);
+      } catch (backendErr) {
+        console.warn("Backend proxy failed, falling back to direct GitHub API:", backendErr);
+        const res = await fetch(`https://api.github.com/users/${ghUsername}/repos?sort=updated&per_page=100`);
+        if (!res.ok) throw backendErr;
+        data = await res.json();
+      }
       if (Array.isArray(data)) setGithubRepos(data); else toast.error("Failed to fetch repos.");
     } catch (err) {
       console.error("fetchGithubRepos Error:", err);
