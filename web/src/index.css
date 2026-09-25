@@ -1,28 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@100..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  @apply bg-[#030205] text-slate-100 min-h-screen relative overflow-x-hidden;
+  @apply bg-bgDark text-textMain min-h-screen relative overflow-x-hidden font-body selection:bg-gold/30 selection:text-gold;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.04) 0%, transparent 40%);
+    radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 40%);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030205;
+  background: #0B0F17;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e1b29;
+  background: #AA8C2C;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d263f;
+  background: #D4AF37;
 }
 
 /* Remove default black bg that react-scroll adds to active spy links */

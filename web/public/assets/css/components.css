@@ -1,0 +1,416 @@
+/*
+ * components.css — Reusable UI components
+ * Esthyak Ahmmed Siyam Portfolio
+ * ==========================================
+ */
+
+/* ── Container ────────────────────────────── */
+
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+}
+
+/* ── Buttons ──────────────────────────────── */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius);
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition-fast);
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Primary — filled gold */
+
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg-void);
+    box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    box-shadow: 0 6px 24px rgba(201, 168, 76, 0.35);
+    color: var(--bg-void);
+}
+
+/* Ghost — transparent with gold border */
+
+.btn-ghost {
+    background-color: transparent;
+    border-color: var(--border-muted);
+    color: var(--text-primary);
+}
+
+.btn-ghost:hover {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    background-color: var(--accent-dim);
+}
+
+/* Small variant */
+
+.btn-sm {
+    padding: 0.5rem 1.1rem;
+    font-size: 0.8rem;
+}
+
+/* Icon inside button */
+
+.btn .btn-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* ── Tags / Pill Labels ────────────────────── */
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    background-color: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    border-radius: 99px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tag-blue {
+    background-color: var(--accent-blue-dim);
+    border-color: rgba(74, 144, 217, 0.25);
+    color: var(--accent-blue);
+}
+
+.tag-neutral {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--border-muted);
+    color: var(--text-secondary);
+}
+
+/* Tag group */
+
+.tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* ── Cards ────────────────────────────────── */
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-card), 0 0 0 1px var(--accent-border);
+    transform: translateY(-3px);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+/* ── Section wrapper ──────────────────────── */
+
+.section {
+    padding-block: clamp(4rem, 8vw, 7rem);
+    position: relative;
+}
+
+.section-alt {
+    background-color: var(--bg-surface);
+}
+
+/* Section inner label + title block */
+
+.section-header {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.section-header .text-eyebrow {
+    margin-bottom: var(--space-4);
+}
+
+.section-header .text-headline {
+    margin-bottom: var(--space-4);
+}
+
+.section-header .text-body {
+    max-width: 56ch;
+}
+
+/* ── Divider rule ─────────────────────────── */
+
+.hr-accent {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+    width: 60px;
+    margin-bottom: var(--space-6);
+}
+
+/* ── Social icon links ────────────────────── */
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    transition: color var(--transition), border-color var(--transition), background-color var(--transition), transform var(--transition-fast);
+}
+
+.social-link:hover {
+    color: var(--accent);
+    border-color: var(--accent-border);
+    background-color: var(--accent-dim);
+    transform: translateY(-2px);
+}
+
+.social-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ── Icon box (expertise tiles) ───────────── */
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background-color: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    flex-shrink: 0;
+}
+
+.icon-box svg {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+}
+
+/* ── Horizontal rule separator ───────────── */
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 0;
+}
+
+/* ── Stats number ─────────────────────────── */
+
+.stat-number {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--accent);
+    line-height: 1;
+}
+
+/* ── Inline text link ─────────────────────── */
+
+.text-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-border);
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.text-link:hover {
+    color: var(--accent-hover);
+    text-decoration-color: var(--accent-hover);
+}
+
+/* ── Glassmorphism card ───────────────────── */
+
+.glass-card {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+}
+
+/* ── Grid utilities ───────────────────────── */
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+}
+
+/* ── Flex utilities ───────────────────────── */
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gap-2 {
+    gap: var(--space-2);
+}
+
+.gap-3 {
+    gap: var(--space-3);
+}
+
+.gap-4 {
+    gap: var(--space-4);
+}
+
+.gap-6 {
+    gap: var(--space-6);
+}
+
+.gap-8 {
+    gap: var(--space-8);
+}
+
+/* ── Form elements ────────────────────────── */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+}
+
+.form-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    background: rgba(22, 27, 39, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input:focus {
+    border-color: var(--accent);
+    background: rgba(22, 27, 39, 0.7);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+select.form-input {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B95A8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    appearance: none;
+}
+
+select.form-input option {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 150px;
+    line-height: 1.6;
+}
+
+/* Form feedback states */
+
+.form-feedback {
+    display: none;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    margin-top: var(--space-4);
+}
+
+.form-feedback.success {
+    display: block;
+    background-color: rgba(74, 200, 120, 0.12);
+    border: 1px solid rgba(74, 200, 120, 0.3);
+    color: #4ac878;
+}
+
+.form-feedback.error {
+    display: block;
+    background-color: rgba(220, 80, 80, 0.12);
+    border: 1px solid rgba(220, 80, 80, 0.3);
+    color: #dc5050;
+}

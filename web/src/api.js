@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -102,6 +102,32 @@ export const deleteProject = async (id) => {
   return res.data;
 };
 
+// Services
+export const getServices = async () => {
+  const res = await api.get("/portfolio/services");
+  return res.data;
+};
+
+export const addService = async (data) => {
+  const res = await api.post("/portfolio/services", data);
+  return res.data;
+};
+
+export const updateService = async (id, data) => {
+  const res = await api.put(`/portfolio/services/${id}`, data);
+  return res.data;
+};
+
+export const deleteService = async (id) => {
+  const res = await api.delete(`/portfolio/services/${id}`);
+  return res.data;
+};
+
+export const getGithubRepos = async (username) => {
+  const res = await api.get(`/portfolio/github-repos/${username}`);
+  return res.data;
+};
+
 // Contact Messages
 export const submitContact = async (data) => {
   const res = await api.post("/messages", data);
@@ -157,5 +183,7 @@ export const getEmailJSKeys = async () => {
   const res = await api.get("/portfolio/emailjs-keys");
   return res.data;
 };
+
+export const CV_DOWNLOAD_URL = `${API_BASE}/portfolio/cv`;
 
 export default api;

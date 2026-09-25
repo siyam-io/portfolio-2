@@ -82,7 +82,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
 const uploadRawStreamToCloudinary = (fileBuffer, originalname) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "portfolio", resource_type: "raw", public_id: originalname },
+      { folder: "portfolio", resource_type: "auto" },
       (error, result) => {
         if (error) return reject(error);
         resolve(result.secure_url);
@@ -100,25 +100,50 @@ router.post("/cv", auth, upload.single("cv"), async (req, res) => {
   }
 
   try {
-    const cloudName = await getDecryptedKey("CLOUDINARY_CLOUD_NAME");
-    const apiKey = await getDecryptedKey("CLOUDINARY_API_KEY");
-    const apiSecret = await getDecryptedKey("CLOUDINARY_API_SECRET");
+    // 1. Save locally in web/public/uploads
+    const localUrl = saveFileLocally(req.file);
+    const base64Data = req.file.buffer.toString("base64");
+    const filename = req.file.originalname || "Esthyak_Ahmmed_Siyam_CV.pdf";
 
-    let cvUrl = "";
+    // 2. Also try uploading to Cloudinary if configured
+    let cloudUrl = "";
+    try {
+      const cloudName = await getDecryptedKey("CLOUDINARY_CLOUD_NAME");
+      const apiKey = await getDecryptedKey("CLOUDINARY_API_KEY");
+      const apiSecret = await getDecryptedKey("CLOUDINARY_API_SECRET");
 
-    if (cloudName && apiKey && apiSecret) {
-      cloudinary.config({
-        cloud_name: cloudName,
-        api_key: apiKey,
-        api_secret: apiSecret,
-      });
-
-      cvUrl = await uploadRawStreamToCloudinary(req.file.buffer, req.file.originalname);
-      return res.json({ success: true, url: cvUrl, source: "cloudinary" });
-    } else {
-      cvUrl = saveFileLocally(req.file);
-      return res.json({ success: true, url: cvUrl, source: "local" });
+      if (cloudName && apiKey && apiSecret) {
+        cloudinary.config({
+          cloud_name: cloudName,
+          api_key: apiKey,
+          api_secret: apiSecret,
+        });
+        cloudUrl = await uploadRawStreamToCloudinary(req.file.buffer, req.file.originalname);
+      }
+    } catch (cErr) {
+      console.warn("Cloudinary upload warning:", cErr.message);
     }
+
+    // 3. Automatically persist CV in Profile model in MongoDB
+    const Profile = (await import("../models/Profile.js")).default;
+    let profile = await Profile.findOne();
+    if (!profile) {
+      profile = new Profile({ name: "Esthyak Ahmmed", role: "Developer", bio: "", about: "" });
+    }
+    profile.cvUrl = "/api/portfolio/cv";
+    profile.cvData = base64Data;
+    profile.cvName = filename;
+    profile.cvContentType = req.file.mimetype || "application/pdf";
+    await profile.save();
+
+    console.log("CV uploaded and stored successfully. Size:", req.file.buffer.length);
+    return res.json({ 
+      success: true, 
+      url: "/api/portfolio/cv", 
+      localUrl, 
+      cloudUrl: cloudUrl || null,
+      msg: "CV uploaded and saved to profile successfully!" 
+    });
   } catch (err) {
     console.error("Upload CV error:", err);
     res.status(500).json({ msg: "CV upload failed", error: err.message });
