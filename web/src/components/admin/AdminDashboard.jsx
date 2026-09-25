@@ -18,6 +18,10 @@ import {
   addProject,
   updateProject,
   deleteProject,
+  getServices,
+  addService,
+  updateService,
+  deleteService,
   getMessages,
   deleteMessage,
   uploadImage,
@@ -32,13 +36,13 @@ import {
   FaSignOutAlt, FaPlus, FaTrash, FaEdit, FaSave, FaArrowLeft,
   FaKey, FaGithub, FaExternalLinkAlt, FaSearch, FaTimes,
   FaChevronLeft, FaChevronRight, FaEye, FaStar, FaCode,
-  FaProjectDiagram, FaCog, FaHome, FaHandshake
+  FaProjectDiagram, FaCog, FaHome, FaHandshake, FaBars
 } from "react-icons/fa";
 
 /* ───────────────────────── Reusable Components ───────────────────────── */
 
 const Card = ({ children, className = "" }) => (
-  <div className={`bg-[#0d0d14]/80 backdrop-blur-sm border border-[#C9A84C]/10 rounded-xl ${className}`}>
+  <div className={`bg-[#0d0d14]/80 backdrop-blur-sm border border-white/[0.06] rounded-xl ${className}`}>
     {children}
   </div>
 );
@@ -141,7 +145,7 @@ const Pagination = ({ page, setPage, total, perPage }) => {
   const totalPages = Math.ceil(total / perPage) || 1;
   if (totalPages <= 1) return null;
   return (
-    <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#C9A84C]/5">
+    <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/[0.06]">
       <button
         onClick={() => setPage(p => Math.max(p - 1, 1))}
         disabled={page === 1}
@@ -163,19 +167,19 @@ const Pagination = ({ page, setPage, total, perPage }) => {
 
 const StatCard = ({ icon: Icon, label, value, color = "gold" }) => {
   const colors = {
-    gold: "from-[#C9A84C]/20 to-transparent border-[#C9A84C]/15 text-[#C9A84C]",
-    blue: "from-blue-500/20 to-transparent border-blue-500/15 text-blue-400",
-    green: "from-emerald-500/20 to-transparent border-emerald-500/15 text-emerald-400",
-    purple: "from-purple-500/20 to-transparent border-purple-500/15 text-purple-400",
+    gold: "from-[#C9A84C]/15 to-transparent border-[#C9A84C]/25 text-[#C9A84C]",
+    blue: "from-blue-500/15 to-transparent border-blue-500/25 text-blue-400",
+    green: "from-emerald-500/15 to-transparent border-emerald-500/25 text-emerald-400",
+    purple: "from-purple-500/15 to-transparent border-purple-500/25 text-purple-400",
   };
   return (
-    <div className={`bg-gradient-to-br ${colors[color]} border rounded-xl p-4 flex items-center gap-3`}>
-      <div className="w-10 h-10 rounded-lg bg-[#0a0a12]/60 flex items-center justify-center flex-shrink-0">
-        <Icon className="text-lg" />
+    <div className={`bg-gradient-to-br ${colors[color]} border rounded-xl p-3 sm:p-4 flex items-center gap-2.5 sm:gap-3 min-w-0 shadow-sm`}>
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#0a0a12]/70 flex items-center justify-center flex-shrink-0">
+        <Icon className="text-base sm:text-lg" />
       </div>
-      <div>
-        <p className="text-2xl font-bold text-[#e8e6e3] leading-none">{value}</p>
-        <p className="text-[11px] text-[#8b8fa3] mt-0.5">{label}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-xl sm:text-2xl font-bold text-[#e8e6e3] leading-none truncate">{value}</p>
+        <p className="text-[10px] sm:text-[11px] text-[#8b8fa3] mt-1 truncate">{label}</p>
       </div>
     </div>
   );
@@ -188,6 +192,7 @@ const AdminDashboard = () => {
   const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [uploading, setUploading] = useState(false);
   const [cvUploading, setCvUploading] = useState(false);
@@ -503,22 +508,46 @@ const AdminDashboard = () => {
 
   /* ── Dashboard ── */
   return (
-    <div className="min-h-screen bg-[#06060c] text-[#e8e6e3] flex">
+    <div className="min-h-screen bg-[#06060c] text-[#e8e6e3] flex relative">
+
+      {/* ── Mobile Backdrop ── */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          aria-hidden="true"
+        />
+      )}
 
       {/* ── Sidebar ── */}
-      <aside className={`${sidebarCollapsed ? "w-16" : "w-60"} bg-[#0a0a12] border-r border-[#C9A84C]/8 flex flex-col transition-all duration-300 flex-shrink-0 sticky top-0 h-screen`}>
+      <aside className={`
+        fixed md:sticky top-0 left-0 h-screen z-50
+        bg-[#0a0a12] border-r border-white/[0.08] flex flex-col
+        transition-transform duration-300 ease-in-out md:translate-x-0
+        ${mobileMenuOpen ? "translate-x-0 shadow-2xl shadow-black/80" : "-translate-x-full"}
+        ${sidebarCollapsed ? "md:w-16" : "w-64 md:w-60"}
+        flex-shrink-0
+      `}>
         {/* Logo */}
-        <div className="h-14 flex items-center px-4 border-b border-[#C9A84C]/8">
-          {!sidebarCollapsed && (
-            <div className="flex items-center gap-2.5">
-              <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
-                <path d="M 50 15 L 80 32.5 L 50 50 L 20 67.5 L 50 85" stroke="#e8e6e3" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
-                <path d="M 50 15 L 20 32.5" stroke="#C9A84C" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
-                <path d="M 50 85 L 80 67.5" stroke="#C9A84C" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
-              </svg>
-              <span className="font-bold text-sm tracking-tight">Admin Panel</span>
-            </div>
-          )}
+        <div className="h-14 flex items-center justify-between px-4 border-b border-white/[0.08]">
+          <div className="flex items-center gap-2.5">
+            <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+              <path d="M 50 15 L 80 32.5 L 50 50 L 20 67.5 L 50 85" stroke="#e8e6e3" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
+              <path d="M 50 15 L 20 32.5" stroke="#C9A84C" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
+              <path d="M 50 85 L 80 67.5" stroke="#C9A84C" strokeWidth="10" strokeLinecap="square" strokeLinejoin="miter"/>
+            </svg>
+            {(!sidebarCollapsed || mobileMenuOpen) && (
+              <span className="font-bold text-sm tracking-tight text-[#e8e6e3]">Admin Panel</span>
+            )}
+          </div>
+          {/* Mobile close button */}
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="md:hidden p-1.5 text-[#8b8fa3] hover:text-[#e8e6e3] hover:bg-white/[0.05] rounded-lg transition cursor-pointer"
+            aria-label="Close menu"
+          >
+            <FaTimes className="text-sm" />
+          </button>
         </div>
 
         {/* Nav */}
@@ -526,7 +555,10 @@ const AdminDashboard = () => {
           {navItems.map(item => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                setActiveTab(item.id);
+                setMobileMenuOpen(false);
+              }}
               className={`w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium transition-all duration-200 cursor-pointer ${
                 activeTab === item.id
                   ? "bg-[#C9A84C]/10 text-[#C9A84C]"
@@ -535,7 +567,7 @@ const AdminDashboard = () => {
               title={item.label}
             >
               <item.icon className="text-sm flex-shrink-0" />
-              {!sidebarCollapsed && (
+              {(!sidebarCollapsed || mobileMenuOpen) && (
                 <>
                   <span className="flex-1 text-left">{item.label}</span>
                   {item.count > 0 && (
@@ -548,34 +580,51 @@ const AdminDashboard = () => {
         </nav>
 
         {/* Bottom */}
-        <div className="p-2 border-t border-[#C9A84C]/8 flex flex-col gap-1">
-          <Link to="/" target="_blank" className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-[#5a5e70] hover:text-[#8b8fa3] hover:bg-[#0d0d14] transition cursor-pointer">
+        <div className="p-2 border-t border-white/[0.08] flex flex-col gap-1">
+          <Link
+            to="/"
+            target="_blank"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-[#5a5e70] hover:text-[#8b8fa3] hover:bg-[#0d0d14] transition cursor-pointer"
+          >
             <FaEye className="text-sm flex-shrink-0" />
-            {!sidebarCollapsed && <span>Preview Site</span>}
+            {(!sidebarCollapsed || mobileMenuOpen) && <span>Preview Site</span>}
           </Link>
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition cursor-pointer">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-red-400/60 hover:text-red-400 hover:bg-red-500/5 transition cursor-pointer"
+          >
             <FaSignOutAlt className="text-sm flex-shrink-0" />
-            {!sidebarCollapsed && <span>Log Out</span>}
+            {(!sidebarCollapsed || mobileMenuOpen) && <span>Log Out</span>}
           </button>
         </div>
       </aside>
 
       {/* ── Main Content ── */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 min-w-0 overflow-y-auto w-full">
         {/* Top bar */}
-        <div className="h-14 border-b border-[#C9A84C]/8 flex items-center justify-between px-6 sticky top-0 bg-[#06060c]/95 backdrop-blur-sm z-10">
-          <h1 className="text-sm font-semibold text-[#e8e6e3]">
-            {navItems.find(n => n.id === activeTab)?.label || "Dashboard"}
-          </h1>
+        <div className="h-14 border-b border-white/[0.08] flex items-center justify-between px-4 sm:px-6 sticky top-0 bg-[#06060c]/95 backdrop-blur-sm z-30">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden p-2 -ml-1 text-[#8b8fa3] hover:text-[#C9A84C] hover:bg-white/[0.05] rounded-lg transition flex items-center justify-center cursor-pointer"
+              aria-label="Open menu"
+            >
+              <FaBars className="text-base" />
+            </button>
+            <h1 className="text-sm font-semibold text-[#e8e6e3]">
+              {navItems.find(n => n.id === activeTab)?.label || "Dashboard"}
+            </h1>
+          </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#4a4e5e]">{profile.name || "Admin"}</span>
+            <span className="hidden sm:inline text-[11px] text-[#4a4e5e]">{profile.name || "Admin"}</span>
             <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/20 flex items-center justify-center text-[#C9A84C] text-xs font-bold">
               {(profile.name || "A").charAt(0).toUpperCase()}
             </div>
           </div>
         </div>
 
-        <div className="p-6 max-w-5xl">
+        <div className="p-4 sm:p-6 max-w-5xl mx-auto w-full">
 
           {/* ════════════ OVERVIEW ════════════ */}
           {activeTab === "overview" && (
@@ -591,7 +640,7 @@ const AdminDashboard = () => {
                 <StatCard icon={FaBriefcase} label="Experiences" value={experiences.length} color="green" />
                 <StatCard icon={FaEnvelope} label="Messages" value={messages.length} color="purple" />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <Card className="p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <FaStar className="text-[#C9A84C] text-xs" />
@@ -729,12 +778,12 @@ const AdminDashboard = () => {
                   {skills.length === 0 ? <EmptyState icon={FaTools} title="No skills yet" subtitle="Add your first skill badge" /> : (
                     <div className="flex flex-col gap-2">
                       {paginatedSkills.map(skill => (
-                        <div key={skill._id} className="flex items-center justify-between p-3 rounded-lg bg-[#0a0a12]/60 border border-[#C9A84C]/5 hover:border-[#C9A84C]/15 transition group">
+                        <div key={skill._id} className="flex items-center justify-between p-3 rounded-lg bg-[#0a0a12]/60 border border-white/[0.06] hover:border-[#C9A84C]/15 transition group">
                           <div className="flex items-center gap-3">
                             <span className="font-medium text-sm">{skill.name}</span>
                             <Badge>{skill.category}</Badge>
                           </div>
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                          <div className="flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition">
                             <BtnIcon onClick={() => startSkillEdit(skill)}><FaEdit className="text-xs" /></BtnIcon>
                             <BtnDanger onClick={() => handleSkillDelete(skill._id)}><FaTrash className="text-xs" /></BtnDanger>
                           </div>
@@ -773,7 +822,7 @@ const AdminDashboard = () => {
                   {experiences.length === 0 ? <EmptyState icon={FaBriefcase} title="No experience" subtitle="Add your work history" /> : (
                     <div className="flex flex-col gap-3">
                       {paginatedExperiences.map(exp => (
-                        <div key={exp._id} className="p-4 rounded-lg bg-[#0a0a12]/60 border border-[#C9A84C]/5 hover:border-[#C9A84C]/15 transition group">
+                        <div key={exp._id} className="p-4 rounded-lg bg-[#0a0a12]/60 border border-white/[0.06] hover:border-[#C9A84C]/15 transition group">
                           <div className="flex justify-between items-start">
                             <div>
                               <h4 className="font-semibold text-sm text-[#C9A84C]">{exp.job}</h4>
@@ -782,7 +831,7 @@ const AdminDashboard = () => {
                                 <Badge variant="blue">{exp.date}</Badge>
                               </div>
                             </div>
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                            <div className="flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition">
                               <BtnIcon onClick={() => startExperienceEdit(exp)}><FaEdit className="text-xs" /></BtnIcon>
                               <BtnDanger onClick={() => handleExperienceDelete(exp._id)}><FaTrash className="text-xs" /></BtnDanger>
                             </div>
@@ -823,7 +872,7 @@ const AdminDashboard = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1">
                       {githubRepos.filter(r => r.name.toLowerCase().includes(repoSearch.toLowerCase()) || (r.description && r.description.toLowerCase().includes(repoSearch.toLowerCase()))).map(repo => (
                         <button key={repo.id} onClick={() => pinRepoToPortfolio(repo)}
-                          className="text-left p-3 rounded-lg border border-[#C9A84C]/5 hover:border-[#C9A84C]/30 hover:bg-[#C9A84C]/5 transition cursor-pointer group">
+                          className="text-left p-3 rounded-lg border border-white/[0.06] hover:border-[#C9A84C]/30 hover:bg-[#C9A84C]/5 transition cursor-pointer group">
                           <p className="font-medium text-xs text-[#e8e6e3] truncate group-hover:text-[#C9A84C] transition">{repo.name}</p>
                           <p className="text-[11px] text-[#4a4e5e] truncate mt-0.5">{repo.description || "No description"}</p>
                         </button>
@@ -866,7 +915,7 @@ const AdminDashboard = () => {
                 <div className="lg:col-span-2">
                   <Card className="p-5">
                     {/* Category Tabs */}
-                    <div className="flex items-center gap-1 mb-4 p-0.5 bg-[#0a0a12] rounded-lg border border-[#C9A84C]/5 w-fit">
+                    <div className="flex items-center gap-1 mb-4 p-0.5 bg-[#0a0a12] rounded-lg border border-white/[0.06] w-fit">
                       {[
                         { key: "Featured", label: "Featured", icon: FaStar },
                         { key: "MoreProjects", label: "More", icon: FaProjectDiagram },
@@ -894,7 +943,7 @@ const AdminDashboard = () => {
                     ) : (
                       <div className="flex flex-col gap-2">
                         {paginatedProjects.map(proj => (
-                          <div key={proj._id} className="flex items-center justify-between p-3 rounded-lg bg-[#0a0a12]/60 border border-[#C9A84C]/5 hover:border-[#C9A84C]/15 transition group">
+                          <div key={proj._id} className="flex items-center justify-between p-3 rounded-lg bg-[#0a0a12]/60 border border-white/[0.06] hover:border-[#C9A84C]/15 transition group">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
                                 <h4 className="font-semibold text-sm text-[#e8e6e3] truncate">{proj.name}</h4>
@@ -910,7 +959,7 @@ const AdminDashboard = () => {
                                 )}
                               </div>
                             </div>
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition ml-2">
+                            <div className="flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition ml-2">
                               <BtnIcon onClick={() => startProjectEdit(proj)}><FaEdit className="text-xs" /></BtnIcon>
                               <BtnDanger onClick={() => handleProjectDelete(proj._id)}><FaTrash className="text-xs" /></BtnDanger>
                             </div>
@@ -984,7 +1033,7 @@ const AdminDashboard = () => {
                   ) : (
                     <div className="flex flex-col gap-2.5">
                       {paginatedServices.map(service => (
-                        <div key={service._id} className="p-4 bg-[#0a0a12] border border-[#C9A84C]/5 hover:border-[#C9A84C]/20 rounded-lg group transition">
+                        <div key={service._id} className="p-4 bg-[#0a0a12] border border-white/[0.06] hover:border-[#C9A84C]/20 rounded-lg group transition">
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3 flex-1 min-w-0">
                               <div 
@@ -996,7 +1045,7 @@ const AdminDashboard = () => {
                                 <p className="text-xs text-[#8b8fa3] mt-1.5 leading-relaxed whitespace-pre-wrap">{service.description}</p>
                               </div>
                             </div>
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0 ml-2">
+                            <div className="flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition flex-shrink-0 ml-2">
                               <BtnIcon onClick={() => startServiceEdit(service)}><FaEdit className="text-xs" /></BtnIcon>
                               <BtnDanger onClick={() => handleServiceDelete(service._id)}><FaTrash className="text-xs" /></BtnDanger>
                             </div>
@@ -1064,9 +1113,9 @@ const AdminDashboard = () => {
                             <span className="text-[10px] text-[#4a4e5e]">{new Date(msg.createdAt).toLocaleDateString()}</span>
                           </div>
                           <a href={`mailto:${msg.from_email}`} className="text-[#C9A84C] text-xs hover:underline">{msg.from_email}</a>
-                          <p className="mt-3 text-xs text-[#8b8fa3] whitespace-pre-wrap bg-[#0a0a12] p-3 rounded-lg border border-[#C9A84C]/5 leading-relaxed">{msg.message}</p>
+                          <p className="mt-3 text-xs text-[#8b8fa3] whitespace-pre-wrap bg-[#0a0a12] p-3 rounded-lg border border-white/[0.06] leading-relaxed">{msg.message}</p>
                         </div>
-                        <BtnDanger onClick={() => handleMessageDelete(msg._id)} className="opacity-0 group-hover:opacity-100 transition ml-3"><FaTrash className="text-xs" /></BtnDanger>
+                        <BtnDanger onClick={() => handleMessageDelete(msg._id)} className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition ml-3"><FaTrash className="text-xs" /></BtnDanger>
                       </div>
                     </Card>
                   ))}
