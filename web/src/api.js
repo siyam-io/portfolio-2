@@ -184,6 +184,27 @@ export const getEmailJSKeys = async () => {
   return res.data;
 };
 
+// CV Management
+export const getCvs = async () => {
+  const res = await api.get("/portfolio/cvs");
+  return res.data;
+};
+
+export const addCv = async (cvData) => {
+  const res = await api.post("/portfolio/cvs", cvData);
+  return res.data;
+};
+
+export const setActiveCv = async (id) => {
+  const res = await api.put(`/portfolio/cvs/${id}/active`);
+  return res.data;
+};
+
+export const deleteCv = async (id) => {
+  const res = await api.delete(`/portfolio/cvs/${id}`);
+  return res.data;
+};
+
 export const CV_DOWNLOAD_URL = `${API_BASE}/portfolio/cv`;
 
 export default api;

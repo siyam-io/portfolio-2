@@ -36,7 +36,7 @@ export function initForm() {
                 form.reset();
             } else {
                 const data = await response.json().catch(() => ({}));
-                const msg = data ? .errors ? .map(e => e.message).join(', ') || 'Something went wrong. Please try again or email me directly.';
+                const msg = data ?.errors ?.map(e => e.message).join(', ') || 'Something went wrong. Please try again or email me directly.';
                 feedback.textContent = msg;
                 feedback.classList.add('error');
             }

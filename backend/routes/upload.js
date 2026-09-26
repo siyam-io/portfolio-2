@@ -124,17 +124,20 @@ router.post("/cv", auth, upload.single("cv"), async (req, res) => {
       console.warn("Cloudinary upload warning:", cErr.message);
     }
 
-    // 3. Automatically persist CV in Profile model in MongoDB
-    const Profile = (await import("../models/Profile.js")).default;
-    let profile = await Profile.findOne();
-    if (!profile) {
-      profile = new Profile({ name: "Esthyak Ahmmed", role: "Developer", bio: "", about: "" });
-    }
-    profile.cvUrl = "/api/portfolio/cv";
-    profile.cvData = base64Data;
-    profile.cvName = filename;
-    profile.cvContentType = req.file.mimetype || "application/pdf";
-    await profile.save();
+    // 3. Automatically persist CV in CV collection
+    const CV = (await import("../models/CV.js")).default;
+    // Check if it's the first CV, if so make it active
+    const existingCvs = await CV.countDocuments();
+    const isActive = existingCvs === 0;
+
+    const newCv = new CV({
+      name: filename.split('.')[0] + " (Upload)",
+      fileName: filename,
+      cvData: base64Data,
+      contentType: req.file.mimetype || "application/pdf",
+      isActive: isActive
+    });
+    await newCv.save();
 
     console.log("CV uploaded and stored successfully. Size:", req.file.buffer.length);
     return res.json({ 

@@ -7,6 +7,7 @@ import Skill from "../models/Skill.js";
 import Experience from "../models/Experience.js";
 import Project from "../models/Project.js";
 import Service from "../models/Service.js";
+import CV from "../models/CV.js";
 import { getDecryptedKey } from "../utils/keys.js";
 
 const router = express.Router();
@@ -16,16 +17,23 @@ const router = express.Router();
    ========================================================================= */
 
 // @route   GET api/portfolio/cv
-// @desc    Download or view CV reliably on all devices
+// @desc    Download or view active CV reliably on all devices
 router.get("/cv", async (req, res) => {
   try {
-    const profile = await Profile.findOne();
-    if (!profile) {
-      return res.status(404).send("Profile not found");
+    const activeCv = await CV.findOne({ isActive: true });
+    
+    if (activeCv && activeCv.cvData) {
+      const fileBuffer = Buffer.from(activeCv.cvData, "base64");
+      const filename = activeCv.fileName || "Esthyak_Ahmmed_Siyam_CV.pdf";
+      res.setHeader("Content-Type", activeCv.contentType || "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.setHeader("Content-Length", fileBuffer.length);
+      return res.send(fileBuffer);
     }
 
-    // 1. If stored as Base64 in database
-    if (profile.cvData) {
+    // Fallback to older profile CV if no active CV found
+    const profile = await Profile.findOne();
+    if (profile && profile.cvData) {
       const fileBuffer = Buffer.from(profile.cvData, "base64");
       const filename = profile.cvName || "Esthyak_Ahmmed_Siyam_CV.pdf";
       res.setHeader("Content-Type", profile.cvContentType || "application/pdf");
@@ -33,23 +41,14 @@ router.get("/cv", async (req, res) => {
       res.setHeader("Content-Length", fileBuffer.length);
       return res.send(fileBuffer);
     }
-
-    // 2. If stored as a local file in uploads
-    if (profile.cvUrl && profile.cvUrl.startsWith("/uploads/")) {
-      const localPath = path.resolve(root, "web/public", profile.cvUrl.replace(/^\//, ""));
-      if (fs.existsSync(localPath)) {
-        return res.download(localPath, profile.cvName || "Esthyak_Ahmmed_Siyam_CV.pdf");
-      }
-    }
-
-    // 3. Fallback: check web/public/uploads/Esthyak_Ahmmed_Siyam_CV.pdf
+    
+    // Fallback: check web/public/uploads/Esthyak_Ahmmed_Siyam_CV.pdf
     const defaultLocal = path.resolve(root, "web/public/uploads/Esthyak_Ahmmed_Siyam_CV.pdf");
     if (fs.existsSync(defaultLocal)) {
       return res.download(defaultLocal, "Esthyak_Ahmmed_Siyam_CV.pdf");
     }
 
-    // 4. Remote URL fallback
-    if (profile.cvUrl && profile.cvUrl.startsWith("http")) {
+    if (profile && profile.cvUrl && profile.cvUrl.startsWith("http")) {
       return res.redirect(profile.cvUrl);
     }
 
@@ -57,6 +56,74 @@ router.get("/cv", async (req, res) => {
   } catch (err) {
     console.error("CV download error:", err);
     res.status(500).send("Error downloading CV");
+  }
+});
+
+// @route   GET api/portfolio/cvs
+// @desc    Get all CVs (Admin only)
+router.get("/cvs", auth, async (req, res) => {
+  try {
+    const cvs = await CV.find().sort({ createdAt: -1 });
+    // Strip out base64 data to save bandwidth on list
+    const cvList = cvs.map(cv => ({
+      _id: cv._id,
+      name: cv.name,
+      fileName: cv.fileName,
+      contentType: cv.contentType,
+      isActive: cv.isActive,
+      createdAt: cv.createdAt
+    }));
+    res.json(cvList);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route   POST api/portfolio/cvs
+// @desc    Upload a new CV (Admin only)
+router.post("/cvs", auth, async (req, res) => {
+  const { name, fileName, cvData, contentType, isActive } = req.body;
+  try {
+    const newCV = new CV({ name, fileName, cvData, contentType, isActive });
+    await newCV.save();
+    res.json({
+      _id: newCV._id,
+      name: newCV.name,
+      fileName: newCV.fileName,
+      isActive: newCV.isActive
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route   PUT api/portfolio/cvs/:id/active
+// @desc    Set a CV as active (Admin only)
+router.put("/cvs/:id/active", auth, async (req, res) => {
+  try {
+    const cv = await CV.findById(req.params.id);
+    if (!cv) return res.status(404).json({ msg: "CV not found" });
+
+    cv.isActive = true;
+    await cv.save(); // The pre-save hook will set others to false
+    res.json({ msg: "CV set as active" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route   DELETE api/portfolio/cvs/:id
+// @desc    Delete a CV (Admin only)
+router.delete("/cvs/:id", auth, async (req, res) => {
+  try {
+    await CV.findByIdAndDelete(req.params.id);
+    res.json({ msg: "CV removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 });
 

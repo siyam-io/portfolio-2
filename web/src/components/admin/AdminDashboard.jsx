@@ -26,6 +26,10 @@ import {
   deleteMessage,
   uploadImage,
   uploadCV,
+  getCvs,
+  addCv,
+  setActiveCv,
+  deleteCv,
   getKeys,
   saveKeys,
   getGithubRepos,
@@ -37,7 +41,7 @@ import {
   FaSignOutAlt, FaPlus, FaTrash, FaEdit, FaSave, FaArrowLeft,
   FaKey, FaGithub, FaExternalLinkAlt, FaSearch, FaTimes,
   FaChevronLeft, FaChevronRight, FaEye, FaStar, FaCode,
-  FaProjectDiagram, FaCog, FaHome, FaHandshake, FaBars
+  FaProjectDiagram, FaCog, FaHome, FaHandshake, FaBars, FaFilePdf
 } from "react-icons/fa";
 
 /* ───────────────────────── Reusable Components ───────────────────────── */
@@ -210,6 +214,7 @@ const AdminDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [services, setServices] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [cvs, setCvs] = useState([]);
 
   // Pagination
   const [projectPage, setProjectPage] = useState(1);
@@ -279,11 +284,12 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [profData, skillsData, expData, projData, servicesData, msgData, keysData] = await Promise.all([
-        getProfile(), getSkills(), getExperiences(), getProjects(), getServices(), getMessages(), getKeys(),
+      const [profData, skillsData, expData, projData, servicesData, msgData, keysData, cvsData] = await Promise.all([
+        getProfile(), getSkills(), getExperiences(), getProjects(), getServices(), getMessages(), getKeys(), getCvs(),
       ]);
       setProfile(profData); setSkills(skillsData); setExperiences(expData);
       setProjects(projData); setServices(servicesData || []); setMessages(msgData); if (keysData) setKeysForm(keysData);
+      setCvs(cvsData || []);
     } catch (err) { console.error("Error fetching data", err); toast.error("Failed to load dashboard data"); }
   };
 
@@ -311,10 +317,9 @@ const AdminDashboard = () => {
     try {
       const data = await uploadCV(file);
       if (data.success) {
-        setProfile(prev => ({ ...prev, cvUrl: data.url }));
-        toast.success("CV uploaded & saved to database!");
-        const updated = await getProfile();
-        if (updated) setProfile(updated);
+        toast.success("CV uploaded to store!");
+        const updatedCvs = await getCvs();
+        setCvs(updatedCvs || []);
       }
     }
     catch (err) {
@@ -505,6 +510,7 @@ const AdminDashboard = () => {
   const navItems = [
     { id: "overview", label: "Overview", icon: FaHome },
     { id: "profile", label: "Profile", icon: FaUser },
+    { id: "cvs", label: "CV Store", icon: FaFilePdf },
     { id: "skills", label: "Skills", icon: FaTools },
     { id: "experience", label: "Experience", icon: FaBriefcase },
     { id: "projects", label: "Projects", icon: FaFolderOpen },
@@ -712,33 +718,12 @@ const AdminDashboard = () => {
               <Card className="p-5">
                 <p className="text-xs font-semibold text-[#8b8fa3] uppercase tracking-wider mb-4">Media</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
+                  <div className="col-span-1 md:col-span-2">
                     <label className="block text-[#8b8fa3] text-xs font-medium mb-1.5 uppercase tracking-wider">Hero Image</label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading}
                       className="w-full text-sm text-[#4a4e5e] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#C9A84C]/10 file:text-[#C9A84C] hover:file:bg-[#C9A84C]/20 file:cursor-pointer"
                     />
-                    {profile.heroImage && <img src={profile.heroImage} alt="Hero" className="mt-3 max-h-32 object-cover rounded-lg border border-[#C9A84C]/10" />}
-                  </div>
-                  <div>
-                    <label className="block text-[#8b8fa3] text-xs font-medium mb-1.5 uppercase tracking-wider">Upload CV (PDF)</label>
-                    <input type="file" accept="application/pdf" onChange={handleCvUpload} disabled={cvUploading}
-                      className="w-full text-sm text-[#4a4e5e] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#C9A84C]/10 file:text-[#C9A84C] hover:file:bg-[#C9A84C]/20 file:cursor-pointer"
-                    />
-                    {cvUploading && <p className="text-xs text-[#C9A84C] mt-2 animate-pulse">Uploading and saving to database...</p>}
-                    {profile.cvUrl && (
-                      <div className="mt-3 flex items-center gap-3">
-                        <a 
-                          href={`${API_BASE}/portfolio/cv`} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          download="Esthyak_Ahmmed_Siyam_CV.pdf"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#C9A84C]/10 hover:bg-[#C9A84C]/20 border border-[#C9A84C]/30 text-[#C9A84C] text-xs font-medium rounded-lg transition"
-                        >
-                          <FaExternalLinkAlt className="text-[10px]" /> Download / Test Current CV
-                        </a>
-                        <span className="text-[11px] text-emerald-400 flex items-center gap-1">✓ Active in Database</span>
-                      </div>
-                    )}
+                    {profile.heroImage && <img src={profile.heroImage} alt="Hero" className="mt-3 max-h-48 object-cover rounded-lg border border-[#C9A84C]/10" />}
                   </div>
                 </div>
               </Card>
@@ -755,6 +740,82 @@ const AdminDashboard = () => {
 
               <BtnPrimary type="submit"><FaSave /> Save Changes</BtnPrimary>
             </form>
+          )}
+
+          {/* ════════════ CV STORE ════════════ */}
+          {activeTab === "cvs" && (
+            <div className="flex flex-col gap-6">
+              <div className="flex items-end justify-between border-b border-white/[0.06] pb-4">
+                <div>
+                  <h2 className="text-xl font-bold mb-1">CV Store</h2>
+                  <p className="text-[#4a4e5e] text-sm">Upload, manage, and select your active CV for download.</p>
+                </div>
+                <div>
+                  <input type="file" id="cv-upload" accept="application/pdf" className="hidden" onChange={handleCvUpload} disabled={cvUploading} />
+                  <label htmlFor="cv-upload" className="h-10 bg-[#C9A84C] hover:bg-[#d4b65e] text-[#0a0a12] font-semibold rounded-lg px-5 text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#C9A84C]/10 hover:shadow-[#C9A84C]/20">
+                    {cvUploading ? (
+                      <span className="animate-pulse">Uploading...</span>
+                    ) : (
+                      <><FaPlus className="text-xs" /> Upload New CV</>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {cvs.length === 0 ? (
+                <EmptyState icon={FaFilePdf} title="No CVs Uploaded" subtitle="Upload your first CV to make it available for download." />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {cvs.map(cv => (
+                    <Card key={cv._id} className={`p-5 flex flex-col justify-between ${cv.isActive ? 'ring-1 ring-[#C9A84C] bg-[#C9A84C]/5' : ''}`}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${cv.isActive ? 'bg-[#C9A84C]/20 text-[#C9A84C]' : 'bg-[#0a0a12] border border-white/[0.06] text-[#8b8fa3]'}`}>
+                            <FaFilePdf className="text-lg" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-[#e8e6e3] text-sm">{cv.name || cv.fileName}</h3>
+                            <p className="text-[11px] text-[#4a4e5e]">{new Date(cv.createdAt).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        {cv.isActive && <Badge variant="default">Active</Badge>}
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 pt-4 border-t border-white/[0.06]">
+                        {cv.isActive ? (
+                          <a href={`${API_BASE}/portfolio/cv`} target="_blank" rel="noopener noreferrer" className="flex-1 text-center py-2 bg-[#0a0a12] text-[#C9A84C] border border-[#C9A84C]/20 rounded text-xs font-semibold hover:bg-[#C9A84C]/10 transition">
+                            Test Download
+                          </a>
+                        ) : (
+                          <button onClick={async () => {
+                            try {
+                              await setActiveCv(cv._id);
+                              toast.success("Active CV updated");
+                              const updatedCvs = await getCvs();
+                              setCvs(updatedCvs);
+                            } catch (e) { toast.error("Failed to set active CV"); }
+                          }} className="flex-1 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded text-xs font-semibold transition cursor-pointer">
+                            Set Active
+                          </button>
+                        )}
+                        {!cv.isActive && (
+                          <button onClick={async () => {
+                            if (!window.confirm("Delete this CV?")) return;
+                            try {
+                              await deleteCv(cv._id);
+                              toast.success("CV deleted");
+                              const updatedCvs = await getCvs();
+                              setCvs(updatedCvs);
+                            } catch (e) { toast.error("Failed to delete CV"); }
+                          }} className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded transition border border-red-500/20 cursor-pointer">
+                            <FaTrash />
+                          </button>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {/* ════════════ SKILLS ════════════ */}

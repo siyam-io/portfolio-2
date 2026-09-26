@@ -31,20 +31,20 @@ export function initNav() {
 
     // ── Mobile menu toggle ────────────────────
     function openMenu() {
-        hamburger ? .classList.add('open');
-        mobileMenu ? .classList.add('open');
+        hamburger ?.classList.add('open');
+        mobileMenu ?.classList.add('open');
         document.body.style.overflow = 'hidden';
-        hamburger ? .setAttribute('aria-expanded', 'true');
+        hamburger ?.setAttribute('aria-expanded', 'true');
     }
 
     function closeMenu() {
-        hamburger ? .classList.remove('open');
-        mobileMenu ? .classList.remove('open');
+        hamburger ?.classList.remove('open');
+        mobileMenu ?.classList.remove('open');
         document.body.style.overflow = '';
-        hamburger ? .setAttribute('aria-expanded', 'false');
+        hamburger ?.setAttribute('aria-expanded', 'false');
     }
 
-    hamburger ? .addEventListener('click', () => {
+    hamburger ?.addEventListener('click', () => {
         const isOpen = hamburger.classList.contains('open');
         isOpen ? closeMenu() : openMenu();
     });
