@@ -90,7 +90,7 @@ const PortfolioHome = () => {
         </svg>
 
 
-        <span style={{"fontFamily":"var(--font-display)","fontSize":"1.15rem","fontWeight":"700","letterSpacing":"-0.02em","color":"var(--text-primary)"}}>{profile.name || 'Esthyak Ahmmed Siyam'}</span>
+        <span style={{"fontFamily":"var(--font-display)","fontSize":"1.15rem","fontWeight":"700","letterSpacing":"-0.02em","color":"var(--text-primary)", "whiteSpace": "nowrap", "overflow": "hidden", "textOverflow": "ellipsis"}}>{profile.name || 'Esthyak Ahmmed Siyam'}</span>
       </a>
 
             <ul className="nav__links" role="list">
@@ -108,10 +108,9 @@ const PortfolioHome = () => {
                   download="Esthyak_Ahmmed_Siyam_CV.pdf"
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="nav__resume-btn"
+                  className="nav__resume-btn hidden md:inline-flex"
                   title="Download CV"
                   style={{
-                    display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
                     padding: "6px 14px",
@@ -182,84 +181,50 @@ const PortfolioHome = () => {
         {/*  ══════════════════════════════════════════
          HERO
          ══════════════════════════════════════════  */}
-        <section id="home" className="hero" aria-label="Introduction">
-            <div className="hero__bg"></div>
-            <div className="mesh-bg" aria-hidden="true"></div>
-            <div className="hero__glow" aria-hidden="true"></div>
-            <div className="hero__noise" aria-hidden="true"></div>
+        <section id="home" className="hero" aria-label="Introduction" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', background: 'transparent', padding: '100px 0 60px 0' }}>
+            <div className="container" style={{ zIndex: 2, textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+                
+                <div className="hero__image-wrap reveal" style={{ width: '130px', height: '130px', margin: '0 auto 2rem auto', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)', boxShadow: '0 15px 35px rgba(0,0,0,0.5)' }}>
+                    <img src={profile.heroImage || '/siyam.png'} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
 
-            <div className="hero__inner">
-                {/*  Left: text  */}
-                <div className="hero__content">
-                    <div className="hero__eyebrow reveal">
-                        <span className="hero__eyebrow-line" aria-hidden="true"></span>
-                        <span className="text-eyebrow">// Digital.Architect</span>
-                    </div>
+                <h1 className="reveal reveal-delay-1" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)', lineHeight: '1.1', fontWeight: 800, color: '#F8FAFC', marginBottom: '1.5rem', letterSpacing: '-0.04em' }}>
+                    I am a <span style={{ color: 'var(--gold, #C9A84C)', fontStyle: 'italic', paddingRight: '0.1em' }}>Developer</span>.
+                </h1>
 
-                    <h1 className="text-display hero__name reveal reveal-delay-1">
-                        {profile.name ? profile.name.split(' ')[0] : 'Esthyak'}<br/><span>{profile.name ? profile.name.split(' ').slice(1).join(' ') : 'Siyam'}</span>
-                    </h1>
+                <p className="reveal reveal-delay-2" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', color: '#94A3B8', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6' }}>
+                    Hi, I'm <strong style={{color: '#E2E8F0', fontWeight: 600}}>{profile.name ? profile.name.split(' ')[0] : 'Esthyak'}</strong>. I write code and solve problems. If it can be imagined, I can build it.
+                </p>
 
-                    <div className="hero__roles reveal reveal-delay-2" role="list" aria-label="Professional roles">
-                        <span className="tag" role="listitem">Full-Stack Developer</span>
-                        <span className="hero__role-sep" aria-hidden="true">·</span>
-                        <span className="tag" role="listitem">Digital Architect</span>
-                        <span className="hero__role-sep" aria-hidden="true">·</span>
-                        <span className="tag" role="listitem">Strategic Operator</span>
-                    </div>
+                <div className="hero__cta reveal reveal-delay-3" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <a href="#work" style={{ padding: '16px 32px', background: '#E2E8F0', color: '#0F172A', borderRadius: '12px', fontWeight: 600, textDecoration: 'none', transition: 'all 0.3s ease', display: 'inline-flex', alignItems: 'center', gap: '8px' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(255,255,255,0.15)' }} onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.background = '#E2E8F0'; e.currentTarget.style.boxShadow = 'none' }}>
+                        View Projects
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#contact" style={{ padding: '16px 32px', background: 'transparent', color: '#F8FAFC', borderRadius: '12px', fontWeight: 600, border: '1px solid rgba(255,255,255,0.2)', textDecoration: 'none', transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)' }} onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}>
+                        Let's Talk
+                    </a>
+                </div>
 
-                    <p className="text-lead hero__lead reveal reveal-delay-3">
-                        {profile.bio || 'I am a passionate MERN stack developer crafting robust and scalable web applications.'}
-                    </p>
-
-                    <div className="hero__cta reveal reveal-delay-4">
-                        <a href="#work" className="btn btn-primary">
-                          View My Work
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <div className="hero__social reveal reveal-delay-5" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '3.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    {profile.github && (
+                        <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: '#94A3B8', transition: 'color 0.2s', display: 'flex', alignItems: 'center' }} onMouseOver={(e) => e.currentTarget.style.color = '#F8FAFC'} onMouseOut={(e) => e.currentTarget.style.color = '#94A3B8'}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                         </a>
-                        <a href="#contact" className="btn btn-ghost">Let's Talk</a>
-                    </div>
-
-                    <div className="hero__social reveal reveal-delay-5">
-                        
-                        <span className="hero__social-label">Find me on</span>
-                        {profile.github && (
-                            <a href={profile.github} className="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                            </a>
-                        )}
-                        {profile.linkedin && (
-                            <a href={profile.linkedin} className="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                            </a>
-                        )}
-                        {profile.whatsapp && (
-                            <a href={`https://wa.me/${profile.whatsapp}`} className="social-link" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            </a>
-                        )}
-
-                    </div>
+                    )}
+                    {profile.linkedin && (
+                        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: '#94A3B8', transition: 'color 0.2s', display: 'flex', alignItems: 'center' }} onMouseOver={(e) => e.currentTarget.style.color = '#F8FAFC'} onMouseOut={(e) => e.currentTarget.style.color = '#94A3B8'}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                    )}
+                    {profile.whatsapp && (
+                        <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: '#94A3B8', transition: 'color 0.2s', display: 'flex', alignItems: 'center' }} onMouseOver={(e) => e.currentTarget.style.color = '#F8FAFC'} onMouseOut={(e) => e.currentTarget.style.color = '#94A3B8'}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        </a>
+                    )}
                 </div>
-                {/*  /.hero__content  */}
-
-                {/*  Right: profile image  */}
-                <div className="hero__image-wrap reveal reveal-delay-2" aria-hidden="true">
-                    <div className="hero__image-frame">
-                        <picture>
-                            <source srcSet={profile.heroImage || '/siyam.png'} type="image/webp" />
-                            <img src={profile.heroImage || '/siyam.png'} alt="{profile.name || 'Esthyak Ahmmed Siyam'} — {profile.role || 'MERN Stack Developer'}" width="420" height="560" fetchpriority="high" decoding="async" />
-                        </picture>
-                    </div>
-                    <div className="hero__image-glow"></div>
-
-                    {/*  Floating badge  */}
-                    
-                </div>
-                {/*  /.hero__image-wrap  */}
 
             </div>
-            {/*  /.hero__inner  */}
 
             {/*  Scroll indicator  */}
             <div className="hero__scroll" aria-hidden="true">
@@ -284,24 +249,21 @@ const PortfolioHome = () => {
         <section id="about" className="section" aria-labelledby="about-heading">
             <div className="container">
                 <div className="section-header reveal">
-                    <p className="text-eyebrow">// Who.I.Am</p>
-                    <h2 className="text-headline" id="about-heading">Developer. Creator. Problem Solver.</h2>
+                    <p className="text-eyebrow">// Developer.Core</p>
+                    <h2 className="text-headline" id="about-heading">I write code. I build anything.</h2>
                 </div>
 
                 <div className="about__inner">
                     {/*  Text left  */}
                     <div className="about__text">
                         <p className="text-body reveal">
-                            {profile.about || 'Hi, I am Esthyak Ahmmed Siyam. I build modern, full-stack web applications with a focus on performance, scalability, and user experience.'}
+                            {profile.about || 'Hi, I am Esthyak Ahmmed Siyam. I am a passionate Developer, and code is my ultimate tool to create, solve, and build.'}
                         </p>
                         <p className="text-body reveal reveal-delay-1">
-                            What I actually do: design and build digital ecosystems. That means websites, e-commerce stores, SEO foundations, analytics pipelines, paid media setups, and the business logic that holds it all together. I don't hand off to another team — I architect
-                            the whole thing.
+                            As a developer, I don't just put together pieces—I engineer solutions from the ground up. Whether it's complex backends, seamless frontends, or full-scale architectures, I have the capability to build whatever logic your business requires.
                         </p>
                         <p className="text-body reveal reveal-delay-2">
-                            Right now I'm co-founding <a href="https://saviorlifestyle.com" className="text-link" target="_blank" rel="noopener noreferrer">Savior Lifestyle</a>, a D2C fashion brand I built from zero. I'm also a marketing and digital consultant
-                            for the <a href="http://cibdhk.com" className="text-link" target="_blank" rel="noopener noreferrer">Culinary Institute of Bangladesh</a>, and a 3D Apparel Designer at Binarycloth Ltd. I work with clients through <a href="https://eahmedsiyam.info"
-                                className="text-link" target="_blank" rel="noopener noreferrer">eahmedsiyam.info</a>.
+                            My philosophy is simple: if a problem exists, it can be solved with code. I am completely confident in my ability to dive into any stack and bring any idea into existence.
                         </p>
                         <div className="reveal reveal-delay-3" style={{"marginTop":"var(--space-8)"}}>
                             <a href="#work" className="btn btn-ghost">See My Work</a>
@@ -513,9 +475,9 @@ const PortfolioHome = () => {
         <section id="services" className="section" aria-labelledby="services-heading">
             <div className="container">
                 <div className="section-header reveal">
-                    <p className="text-eyebrow">// Work.With.Me</p>
-                    <h2 className="text-headline" id="services-heading">Services &amp; Collaboration</h2>
-                    <p className="text-body">I take on a limited number of projects at a time. If it's interesting work, reach out.</p>
+                    <p className="text-eyebrow">// What.I.Can.Build</p>
+                    <h2 className="text-headline" id="services-heading">Engineering &amp; Development</h2>
+                    <p className="text-body">As a developer, I can build and engineer virtually anything you need. If you have an idea, we can write the code to make it real.</p>
                 </div>
 
                 
